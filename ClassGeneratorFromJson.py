@@ -3,6 +3,10 @@ import warnings
 from dataclasses import dataclass
 from typing import TypedDict
 
+"""
+Generate a python class (as a .py file from a json file)
+"""
+
 class ClassGenerator:
     def __init__(self, json_file_path, class_name="GeneratedClass", class_type="dataclass"):
         """
@@ -53,8 +57,6 @@ class ClassGenerator:
         class_code += "    def __init__(self, **kwargs):\n"
         for attr in self.attributes:
             class_code += f"        self.{attr} = kwargs.get('{attr}', None)\n"
-        class_code += "\n    def __repr__(self):\n"
-        class_code += "        return f\"{" + self.class_name + "(\" + ', '.join(f\"{k}={{self.__dict__[k]}}\" for k in self.__dict__) + \")\"\n"
         return class_code
 
     def _generate_attrs_class(self):
@@ -91,7 +93,6 @@ class ClassGenerator:
             self.save_class_to_file(class_code)
         else:
             print(class_code)
-        exec(class_code, globals())
 
     @staticmethod
     def load_json_to_class(json_file_path, cls):
